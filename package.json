@@ -1,0 +1,35 @@
+{
+    "version": "0.0.1",
+    "license": "MIT",
+    "name": "node-red-contrib-myq",
+    "description": "Node-Red node to control MyQ (Chamberlain) devices",
+    "homepage": "https://github.com/dre2901/node-red-contrib-myq",
+    "author": {
+        "name": "Dimitry Remenyuk",
+        "email": "dre2901@gmail.com"
+    },
+    "bugs": {
+        "url": "https://github.com/dre2901/node-red-contrib-myq/issues"
+    },
+    "node-red": {
+        "nodes": {
+            "myq": "myq.js"
+        }
+    },
+    "dependencies": {
+        "myq-api": "2.0.2"
+    },
+    "devDependencies": {
+        "node-red-node-test-helper": "^0.2.5"
+    },
+    "keywords": [
+        "node-red",
+        "myq",
+        "chamberlain",
+        "liftmaster"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dre2901/node-red-contrib-myq.git"
+    }
+}
