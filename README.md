@@ -1,5 +1,11 @@
 # node-red-contrib-myq
-Node-Red node to control MyQ (Chamberlain) devices
+Node-Red node to control MyQ (Chamberlain) devices. Based on awesome [myq-api](https://github.com/thomasmunduchira/myq-api) library. 
+
+## Installation
+```
+npm install node-red-contrib-myq
+```
+Drop the `myq device node` to your flow. Set `Serial number`, `Username` and `Password` in properties. That's it. 
 
 ## Inputs
 `payload` (optional) - string
