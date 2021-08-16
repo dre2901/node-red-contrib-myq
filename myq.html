@@ -39,14 +39,14 @@
 </script>
 
 <script type="text/html" data-help-name="myq-device-node">
-    <p>Node representing one MyQ device (door or light)</p>
+    <p>Node representing one MyQ device (door, light or lamp)</p>
 
     <h3>Inputs</h3>
     <dl class="message-properties">
         <dt class="optional">payload
             <span class="property-type">string</span>
         </dt>
-        <dd> Action to perform on device. Supported actions for doors <code>open</code> and <code>close</code>, for lights <code>on</code> and <code>off</code>. Any other content or no payload at all will trigger retrieval of status information </dd>
+        <dd> Action to perform on device. Supported actions for doors <code>open</code> and <code>close</code>, for lights <code>on</code> and <code>off</code>, for lamps <code>lamp_on</code> and <code>lamp_off</code>. Any other content or no payload at all will trigger retrieval of status information </dd>
     </dl>
 
     <h3>Outputs</h3>
@@ -72,5 +72,5 @@
      </ol>
 
    <h3>Details</h3>
-   <p>Node to control MyQ device (door or light). Requires serial number of device and credentials for MyQ app.</p>
+   <p>Node to control MyQ device (door, light or lamp). Requires serial number of device and credentials for MyQ app.</p>
 </script>

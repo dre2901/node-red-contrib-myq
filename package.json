@@ -1,5 +1,5 @@
 {
-    "version": "0.0.2",
+    "version": "0.0.4",
     "license": "MIT",
     "name": "node-red-contrib-myq",
     "description": "Node-Red node to control MyQ (Chamberlain) devices",
@@ -17,7 +17,7 @@
         }
     },
     "dependencies": {
-        "myq-api": "2.0.4"
+        "@dre2901/myq-api": "2.0.5"
     },
     "devDependencies": {
         "node-red-node-test-helper": "^0.2.5"

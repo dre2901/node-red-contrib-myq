@@ -10,7 +10,7 @@ Drop the `myq device node` to your flow. Set `Serial number`, `Username` and `Pa
 ## Inputs
 `payload` (optional) - string
 
-Action to perform on device. Supported actions for doors `open` and `close`, for lights `on` and `off`. Any other content or no payload at all will trigger retrieval of status information
+Action to perform on device. Supported actions for doors `open` and `close`, for lights `on` and `off`, for lamps `lamp_on` and `lamp_off`. Any other content or no payload at all will trigger retrieval of status information
 
 ## Outputs
 * Status output

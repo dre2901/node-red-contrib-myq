@@ -1,5 +1,5 @@
 module.exports = function (RED) {
-    const MyQ = require('myq-api');
+    const MyQ = require('@dre2901/myq-api');
     const api = new MyQ();
 
     function MyqDeviceNode(config) {
@@ -28,6 +28,12 @@ module.exports = function (RED) {
                     } if (msg.payload === 'on') {
                         this.debug(`Turning on lights with serial number ${serialNumber}`);
                         return api.setLightState(serialNumber, MyQ.actions.light.TURN_ON);
+                    } if (msg.payload === 'lamp_off') {
+                        this.debug(`Turning off lamp with serial number ${serialNumber}`);
+                        return api.setLampState(serialNumber, MyQ.actions.light.TURN_OFF);
+                    } if (msg.payload === 'lamp_on') {
+                        this.debug(`Turning on lamp with serial number ${serialNumber}`);
+                        return api.setLampState(serialNumber, MyQ.actions.light.TURN_ON);
                     } else {
                         this.debug(`Retrieving state for serial number ${serialNumber}`);
                         // return api.getDoorState(serialNumber);
@@ -38,10 +44,10 @@ module.exports = function (RED) {
                     this.debug('MyQ result:');
                     this.debug(JSON.stringify(result, null, 2));
                     if (result.device) {
-                        if (result.device.state.door_state === 'open' || result.device.state.light_state === 'on') {
-                            this.status({ fill: "red", shape: "dot", text: result.device.state.door_state || result.device.state.light_state });
-                        } else if (result.device.state.door_state === 'closed' || result.device.state.light_state === 'off') {
-                            this.status({ fill: "green", shape: "dot", text: result.device.state.door_state || result.device.state.light_state });
+                        if (result.device.state.door_state === 'open' || result.device.state.light_state === 'on' || result.device.state.lamp_state === 'on') {
+                            this.status({ fill: "red", shape: "dot", text: result.device.state.door_state || result.device.state.light_state || result.device.state.lamp_state });
+                        } else if (result.device.state.door_state === 'closed' || result.device.state.light_state === 'off' || result.device.state.lamp_state === 'off') {
+                            this.status({ fill: "green", shape: "dot", text: result.device.state.door_state || result.device.state.light_state || result.device.state.lamp_state });
                         }
                     }
                     msg.payload = result;
