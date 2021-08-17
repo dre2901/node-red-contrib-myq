@@ -30,10 +30,10 @@ module.exports = function (RED) {
                         return api.setLightState(serialNumber, MyQ.actions.light.TURN_ON);
                     } if (msg.payload === 'lamp_off') {
                         this.debug(`Turning off lamp with serial number ${serialNumber}`);
-                        return api.setLampState(serialNumber, MyQ.actions.light.TURN_OFF);
+                        return api.setLampState(serialNumber, MyQ.actions.lamp.TURN_OFF);
                     } if (msg.payload === 'lamp_on') {
                         this.debug(`Turning on lamp with serial number ${serialNumber}`);
-                        return api.setLampState(serialNumber, MyQ.actions.light.TURN_ON);
+                        return api.setLampState(serialNumber, MyQ.actions.lamp.TURN_ON);
                     } else {
                         this.debug(`Retrieving state for serial number ${serialNumber}`);
                         // return api.getDoorState(serialNumber);
