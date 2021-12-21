@@ -1,53 +1,51 @@
 module.exports = function (RED) {
-    const MyQ = require('@dre2901/myq-api');
-    const api = new MyQ();
+    const myQApi = require('@hjdhjd/myq');
 
     function MyqDeviceNode(config) {
         RED.nodes.createNode(this, config);
         const node = this;
-        const username = this.credentials.username;
-        const password = this.credentials.password;
+        this.user = RED.nodes.getNode(config.user);
+        const username = this.user ? this.user.username : '';
+        const password = this.user ? this.user.password : '';
         const serialNumber = config.serialnumber;
+        const deviceName = config.name;
+        const api = new myQApi.myQApi(username, password);
 
         node.on('input', function (msg, send, done) {
             api
-                .login(username, password)
-                .then((loginResult) => {
-                    this.debug(`Short-lived security token: '${loginResult.securityToken}'`);
-                    // return api.getDevices();
-
-                    if (msg.payload === 'close') {
-                        this.debug(`Close door with serial number ${serialNumber}`);
-                        return api.setDoorState(serialNumber, MyQ.actions.door.CLOSE);
-                    } else if (msg.payload === 'open') {
-                        this.debug(`Open door with serial number ${serialNumber}`);
-                        return api.setDoorState(serialNumber, MyQ.actions.door.OPEN);
-                    } if (msg.payload === 'off') {
-                        this.debug(`Turning off lights with serial number ${serialNumber}`);
-                        return api.setLightState(serialNumber, MyQ.actions.light.TURN_OFF);
-                    } if (msg.payload === 'on') {
-                        this.debug(`Turning on lights with serial number ${serialNumber}`);
-                        return api.setLightState(serialNumber, MyQ.actions.light.TURN_ON);
-                    } if (msg.payload === 'lamp_off') {
-                        this.debug(`Turning off lamp with serial number ${serialNumber}`);
-                        return api.setLampState(serialNumber, MyQ.actions.lamp.TURN_OFF);
-                    } if (msg.payload === 'lamp_on') {
-                        this.debug(`Turning on lamp with serial number ${serialNumber}`);
-                        return api.setLampState(serialNumber, MyQ.actions.lamp.TURN_ON);
+                .refreshDevices()
+                .then((refreshResult) => {
+                    this.debug(`Result of devices refresh: '${refreshResult}'`);
+                    if (!refreshResult) {
+                        return Promise.reject('Could not refresh devices!');
                     } else {
-                        this.debug(`Retrieving state for serial number ${serialNumber}`);
-                        // return api.getDoorState(serialNumber);
-                        return api.getDevice(serialNumber);
+                        this.debug(api.devices);
+
+                        const device = api.devices.find(
+                            (d) => (serialNumber && serialNumber === d.serial_number || deviceName === d.name)
+                        );
+
+                        if (!device) {
+                            return Promise.reject(`No device with either serial number "${serialNumber}" or name "${deviceName}" were found!`);
+                        } else {
+                            if (!msg.payload || msg.payload === '' || msg.payload === 'info') {
+                                this.debug(`Retrieving state for serial number "${serialNumber}" or name "${deviceName}"`);
+                                return Promise.resolve(device);
+                            } else {
+                                this.debug(`Executing command "${msg.payload}" for device door with serial number "${serialNumber}" or name "${deviceName}"`);
+                                return api.execute(device, msg.payload);
+                            }
+                        }
                     }
                 })
                 .then((result) => {
                     this.debug('MyQ result:');
                     this.debug(JSON.stringify(result, null, 2));
-                    if (result.device) {
-                        if (result.device.state.door_state === 'open' || result.device.state.light_state === 'on' || result.device.state.lamp_state === 'on') {
-                            this.status({ fill: "red", shape: "dot", text: result.device.state.door_state || result.device.state.light_state || result.device.state.lamp_state });
-                        } else if (result.device.state.door_state === 'closed' || result.device.state.light_state === 'off' || result.device.state.lamp_state === 'off') {
-                            this.status({ fill: "green", shape: "dot", text: result.device.state.door_state || result.device.state.light_state || result.device.state.lamp_state });
+                    if (result.state) {
+                        if (result.state.door_state === 'open' || result.state.light_state === 'on' || result.state.lamp_state === 'on') {
+                            this.status({ fill: "red", shape: "dot", text: result.state.door_state || result.state.light_state || result.state.lamp_state });
+                        } else if (result.state.door_state === 'closed' || result.state.light_state === 'off' || result.device.state.lamp_state === 'off') {
+                            this.status({ fill: "green", shape: "dot", text: result.state.door_state || result.state.light_state || result.state.lamp_state });
                         }
                     }
                     msg.payload = result;
@@ -57,29 +55,6 @@ module.exports = function (RED) {
                         done();
                     }
                 })
-                // .then((getDevicesResult) => {
-                //     this.debug('getDevices result:');
-                //     this.debug(JSON.stringify(getDevicesResult, null, 2));
-
-                //     const { devices } = getDevicesResult;
-                //     if (devices.length === 0) {
-                //         throw Error('No devices found!');
-                //     }
-                //     this.debug('Devices:');
-                //     devices.forEach((device, index) => {
-                //         this.debug(
-                //             `Device ${index} - Name: '${device.name}', Serial Number: '${device.serial_number}'`
-                //         );
-                //     });
-
-
-                //     msg.payload = devices;
-                //     node.send(msg);
-                //     if (done) {
-                //         // Node-RED 1.0 compatible
-                //         done();
-                //     }
-                // })
                 .catch((error) => {
                     this.error('Error received:');
                     this.error(error);
@@ -96,10 +71,5 @@ module.exports = function (RED) {
 
         });
     }
-    RED.nodes.registerType("myq-device-node", MyqDeviceNode, {
-        credentials: {
-            username: { type: "text" },
-            password: { type: "password" }
-        }
-    });
+    RED.nodes.registerType("myq-device-node", MyqDeviceNode);
 }
