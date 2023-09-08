@@ -9,7 +9,8 @@ module.exports = function (RED) {
         const password = this.user ? this.user.password : '';
         const serialNumber = config.serialnumber;
         const deviceName = config.name;
-        const api = new myQApi.myQApi(username, password);
+        const region = config.region;
+        const api = new myQApi.myQApi(username, password, console, region);
 
         node.on('input', function (msg, send, done) {
             api

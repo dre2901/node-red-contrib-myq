@@ -1,5 +1,5 @@
 {
-    "version": "0.0.7",
+    "version": "0.0.9",
     "license": "MIT",
     "name": "node-red-contrib-myq",
     "description": "Node-Red node to control MyQ (Chamberlain) devices",
@@ -18,10 +18,14 @@
         }
     },
     "dependencies": {
-        "@hjdhjd/myq": "7.4.2"
+        "@hjdhjd/myq": "6.0.9",
+        "patch-package": "^8.0.0"
     },
     "devDependencies": {
         "node-red-node-test-helper": "^0.2.5"
+    },
+    "scripts": {
+        "postinstall": "patch-package"
     },
     "keywords": [
         "node-red",
