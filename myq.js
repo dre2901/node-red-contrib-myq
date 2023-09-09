@@ -20,7 +20,7 @@ module.exports = function (RED) {
                     if (!refreshResult) {
                         return Promise.reject('Could not refresh devices!');
                     } else {
-                        this.debug(api.devices);
+                        this.debug(JSON.stringify(api.devices, null, 2));
 
                         const device = api.devices.find(
                             (d) => (serialNumber && serialNumber === d.serial_number || deviceName === d.name)
@@ -43,9 +43,9 @@ module.exports = function (RED) {
                     this.debug('MyQ result:');
                     this.debug(JSON.stringify(result, null, 2));
                     if (result.state) {
-                        if (result.state.door_state === 'open' || result.state.light_state === 'on' || result.state.lamp_state === 'on') {
+                        if (result.state.door_state === 'open' || result.state.door_state === 'opening' || result.state.light_state === 'on' || result.state.lamp_state === 'on') {
                             this.status({ fill: "red", shape: "dot", text: result.state.door_state || result.state.light_state || result.state.lamp_state });
-                        } else if (result.state.door_state === 'closed' || result.state.light_state === 'off' || result.device.state.lamp_state === 'off') {
+                        } else if (result.state.door_state === 'closed' || result.state.door_state === 'closing' || result.state.light_state === 'off' || result.state.lamp_state === 'off') {
                             this.status({ fill: "green", shape: "dot", text: result.state.door_state || result.state.light_state || result.state.lamp_state });
                         }
                     }
