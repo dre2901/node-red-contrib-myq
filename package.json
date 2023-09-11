@@ -1,5 +1,5 @@
 {
-    "version": "0.0.10",
+    "version": "0.0.11",
     "license": "MIT",
     "name": "node-red-contrib-myq",
     "description": "Node-Red node to control MyQ (Chamberlain) devices",

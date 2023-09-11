@@ -12,19 +12,6 @@
         icon: "myq.png",
         label: function () {
             return this.name || "myq-device-node";
-        },
-        oneditprepare: function () {
-            $("#node-input-region").typedInput({
-                types: [
-                    {
-                        value: "east",
-                        options: [
-                            { value: "east", label: "east" },
-                            { value: "west", label: "west" },
-                        ]
-                    }
-                ]
-            });
         }
     });
 </script>
@@ -41,10 +28,6 @@
     <div class="form-row">
         <label for="node-input-serialnumber"><i class="fa fa-barcode"></i> Serial number</label>
         <input type="text" id="node-input-serialnumber" placeholder="Serial number">
-    </div>
-    <div class="form-row">
-        <label for="node-input-region"><i class="fa fa-globe"></i> Region</label>
-        <input type="text" id="node-input-region" placeholder="Region">
     </div>
 </script>
 

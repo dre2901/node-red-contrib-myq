@@ -1,9 +1,12 @@
 module.exports = function (RED) {
-    function MyqCredentialsNode(n) {
-        RED.nodes.createNode(this, n);
-        this.description = this.description;
+    const myQApi = require('@hjdhjd/myq');
+    function MyqCredentialsNode(config) {
+        RED.nodes.createNode(this, config);
+        this.description = config.description;
+        this.region = config.region;
         this.username = this.credentials.username;
         this.password = this.credentials.password;
+        this.api = new myQApi.myQApi(this.username, this.password, console, this.region);
     }
     RED.nodes.registerType("myq-credentials", MyqCredentialsNode, {
         credentials: {

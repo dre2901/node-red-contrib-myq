@@ -5,14 +5,17 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
         const node = this;
         this.user = RED.nodes.getNode(config.user);
-        const username = this.user ? this.user.username : '';
-        const password = this.user ? this.user.password : '';
         const serialNumber = config.serialnumber;
         const deviceName = config.name;
-        const region = config.region;
-        const api = new myQApi.myQApi(username, password, console, region);
+        const api = this.user.api;
 
         node.on('input', function (msg, send, done) {
+            if (!api) {
+                this.error('No MyQ Api Server was registered!');
+            } else {
+                this.debug(`Using MyQ Api Server in ${api.region} region`);
+            }
+
             api
                 .refreshDevices()
                 .then((refreshResult) => {
