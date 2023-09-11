@@ -1,5 +1,5 @@
 module.exports = function (RED) {
-    const myQApi = require('@hjdhjd/myq');
+    const myQApi = require('@brbeaird/myq');
     function MyqCredentialsNode(config) {
         RED.nodes.createNode(this, config);
         this.description = config.description;

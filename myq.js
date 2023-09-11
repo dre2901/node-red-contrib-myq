@@ -1,6 +1,4 @@
 module.exports = function (RED) {
-    const myQApi = require('@hjdhjd/myq');
-
     function MyqDeviceNode(config) {
         RED.nodes.createNode(this, config);
         const node = this;
