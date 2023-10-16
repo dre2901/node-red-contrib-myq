@@ -6,16 +6,17 @@ module.exports = function (RED) {
         const serialNumber = config.serialnumber;
         const deviceName = config.name;
         const api = this.user.api;
+        this.username = this.user.username;
+        this.password = this.user.password;
 
         node.on('input', function (msg, send, done) {
             if (!api) {
                 this.error('No MyQ Api Server was registered!');
             } else {
-                this.debug(`Using MyQ Api Server in ${api.region} region`);
+                this.debug(`Using MyQ Api Server for user ${this.username}`);
             }
 
-            api
-                .refreshDevices()
+            (api.accessToken ? api.refreshDevices() : api.login(this.username, this.password))
                 .then((refreshResult) => {
                     this.debug(`Result of devices refresh: '${refreshResult}'`);
                     if (!refreshResult) {
@@ -58,10 +59,7 @@ module.exports = function (RED) {
                     }
                 })
                 .catch((error) => {
-                    this.error('Error received:');
                     this.error(error);
-                    this.error(`Error code: ${error.code}`);
-                    this.error(`Error message: ${error.message}`);
                     if (done) {
                         // Node-RED 1.0 compatible
                         done(error);
